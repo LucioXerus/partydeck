@@ -98,6 +98,16 @@ See `steam_settings.EXAMPLE\subscribed_groups_clans.EXAMPLE.txt` for an example.
 
 ---
 
+## Purchased Keys:
+Some games request CD keys or proof-of-purchase keys for installed apps and DLCs.  
+You can provide these keys to the game with a `steam_settings\purchased_keys.txt` file.  
+
+The format is `appid=KEY` with one entry per line. Comments start with `#`.  
+
+See `steam_settings.EXAMPLE\purchased_keys.EXAMPLE.txt` for an example.
+
+---
+
 ## App paths:
 Some rare games might need to be provided one or more paths to app ids.  
 For example the path to where a dlc is installed.  
@@ -226,9 +236,11 @@ An example that was made for payday 2 can be found in `steam_settings.EXAMPLE`
 Copy a `png`, or a `jpg`, or a `jpeg` image file to your `GSE Saves/settings` folder and name it `account_avatar`.  
 You can also place this file inside the local `steam_settings` folder of the game.  
 
+You can set a default profile picture for users who are missing one by copying a similar file called `account_avatar_default`.  
+
 Players avatars are shared over the local network
 
-You can find an example in `steam_settings.EXAMPLE`
+You can find the example in `steam_settings.EXAMPLE`
 
 ---
 
