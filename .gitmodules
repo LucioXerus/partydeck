@@ -4,6 +4,8 @@
 [submodule "deps/gbe_fork"]
 	path = deps/gbe_fork
 	url = https://github.com/Detanup01/gbe_fork.git
+	branch = dev
 [submodule "deps/umu-launcher"]
 	path = deps/umu-launcher
 	url = https://github.com/Open-Wine-Components/umu-launcher.git
+	branch = main
