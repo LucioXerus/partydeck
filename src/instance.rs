@@ -1,5 +1,5 @@
-use crate::monitor::Monitor;
 use crate::app::PartyConfig;
+use crate::monitor::Monitor;
 use crate::profiles::GUEST_NAMES;
 
 #[derive(Clone)]
@@ -8,6 +8,7 @@ pub struct Instance {
     pub profname: String,
     pub profselection: usize,
     pub monitor: usize,
+    pub display_index: usize,
     pub width: u32,
     pub height: u32,
 }
@@ -92,5 +93,24 @@ pub fn set_instance_names(instances: &mut Vec<Instance>, profiles: &[String]) {
         } else {
             instance.profname = profiles[instance.profselection].to_owned();
         }
+    }
+}
+
+pub fn set_instance_display_indices(instances: &mut Vec<Instance>) {
+    let mut monitors_with_count: std::collections::HashMap<usize, usize> =
+        std::collections::HashMap::new();
+
+    for instance in instances.iter() {
+        let count = monitors_with_count.entry(instance.monitor).or_insert(0);
+        *count += 1;
+    }
+
+    let mut current_index: std::collections::HashMap<usize, usize> =
+        std::collections::HashMap::new();
+
+    for instance in instances.iter_mut() {
+        let idx = current_index.entry(instance.monitor).or_insert(0);
+        instance.display_index = *idx;
+        *idx += 1;
     }
 }

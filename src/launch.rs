@@ -22,8 +22,12 @@ pub fn setup_profiles(
             create_profile_gamesave(&instance.profname, h)?;
         }
         println!(
-            "[partydeck] - Profile: {}, Monitor: {}, Resolution: {}x{}",
-            instance.profname, instance.monitor, instance.width, instance.height
+            "[partydeck] - Profile: {}, Monitor: {}, DisplayIndex: {}, Resolution: {}x{}",
+            instance.profname,
+            instance.monitor,
+            instance.display_index,
+            instance.width,
+            instance.height
         );
     }
 
@@ -275,7 +279,7 @@ pub fn launch_cmds(
         }
         if cfg.gamescope_sdl_backend {
             cmd.arg("--backend=sdl");
-            cmd.arg(format!("--display-index={}", instance.monitor));
+            cmd.arg(format!("--display-index={}", instance.display_index));
         }
         if cfg.kbm_support {
             let mut instance_has_keyboard = false;

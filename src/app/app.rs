@@ -302,6 +302,7 @@ impl PartyApp {
                                 profname: String::new(),
                                 profselection: 0,
                                 monitor: 0,
+                                display_index: 0,
                                 width: 0,
                                 height: 0,
                             });
@@ -408,6 +409,7 @@ impl PartyApp {
             set_instance_resolutions(&mut self.instances, &self.monitors[0], &self.options);
         }
         set_instance_names(&mut self.instances, &self.profiles);
+        set_instance_display_indices(&mut self.instances);
 
         let handler = if let Some(h) = self.handler_lite.clone() {
             h
