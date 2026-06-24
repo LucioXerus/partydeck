@@ -227,7 +227,9 @@ pub fn launch_cmds(
 
         cmd.current_dir(cwd);
 
-        cmd.env("SDL_JOYSTICK_HIDAPI", "0");
+        if !win || !h.enable_hidraw {
+            cmd.env("SDL_JOYSTICK_HIDAPI", "0");
+        }
         cmd.env("ENABLE_GAMESCOPE_WSI", "0");
         if h.sdl2_override != SDL2Override::No {
             let path_sdl = match h.sdl2_override {
@@ -248,7 +250,11 @@ pub fn launch_cmds(
             cmd.env("WINEPREFIX", &path_pfx);
             cmd.env("PROTON_VERB", "run");
             cmd.env("PROTONPATH", protonpath);
-            cmd.env("PROTON_DISABLE_HIDRAW", "1");
+            if h.enable_hidraw {
+                cmd.env("PROTON_ENABLE_HIDRAW", "1");
+            } else {
+                cmd.env("PROTON_DISABLE_HIDRAW", "1");
+            }
             if cfg.proton_wow64 {
                 cmd.env("PROTON_USE_WOW64", "1");
             }
@@ -335,6 +341,14 @@ pub fn launch_cmds(
                 || (!instance.devices.contains(&d) && dev.device_type == DeviceType::Gamepad)
             {
                 cmd.args(["--bind", "/dev/null", &dev.path]);
+                // Wine's winebus reads controllers via /dev/hidraw* when
+                // hidraw is exposed, so masking only the evdev node leaks
+                // input to every instance.
+                if h.enable_hidraw {
+                    for hp in &dev.hidraw_paths {
+                        cmd.args(["--bind", "/dev/null", hp]);
+                    }
+                }
             }
         }
 
@@ -368,6 +382,13 @@ pub fn launch_cmds(
                     &game_subpath.to_string_lossy(),
                 ]);
             }
+        }
+
+        let is_appimage = std::env::var("APPIMAGE").is_ok();
+        if is_appimage {
+            // Because we are faking temp directory, this makes the system use the real vulkan directory for games
+            // Used here because the env var is set durring bwrap and gamescope process starting so env cant be cleared at this stage.
+            cmd.args(["--unsetenv","VK_DRIVER_FILES"]); 
         }
 
         if h.use_goldberg {
@@ -441,6 +462,7 @@ pub fn launch_cmds(
                 _ => {}
             };
         }
+
 
         cmd.arg(&path_exec);
 

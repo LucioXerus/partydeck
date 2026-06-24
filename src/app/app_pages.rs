@@ -41,6 +41,7 @@ impl PartyApp {
         ui.horizontal_wrapped(|ui| {
             ui.hyperlink_to("@Blahkaey", "https://github.com/Blahkaey");
             ui.hyperlink_to("@blckink", "https://github.com/blckink");
+            ui.hyperlink_to("@cseelhoff", "https://github.com/cseelhoff");
             ui.hyperlink_to("@davidawesome-02", "https://github.com/davidawesome-02");
             ui.hyperlink_to("@felipecrs", "https://github.com/felipecrs");
             ui.hyperlink_to("@framilano", "https://github.com/framilano");
@@ -341,6 +342,10 @@ impl PartyApp {
                     "System Installation",
                 );
             });
+        }
+
+        if h.win() {
+            ui.checkbox(&mut h.enable_hidraw, "Enable HIDraw for non-Xbox controllers (fixes Unity Input System games; may cause double input in non-Unity games!)");
         }
 
         if !h.win() {
